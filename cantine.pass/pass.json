@@ -1,0 +1,38 @@
+{
+    "organizationName": "Vince Linise",
+    "passTypeIdentifier": "pass.xyz.papillon.cantine",
+    "description": "Carte de cantine",
+    "teamIdentifier": "7RXNP6V83P",
+    "backgroundColor": "rgb(42,147,122)",
+    "labelColor": "rgb(255,255,255)",
+    "foregroundColor": "rgb(255,255,255)",
+    "secondary-auxiliary": [
+        {
+            "fieldUUID": "eb5d4c80-b887-11ee-8cf2-c94c24ba1928"
+        }
+    ],
+    "associatedStoreIdentifiers" : [1662669707],
+    "appLaunchURL": "exp+papillonvex://",
+    "formatVersion": 1,
+    "storeCard": {
+        "primaryFields": [],
+        "backFields": [
+            {
+                "value": "Ce passe est strictement personnel.",
+                "key": "aboutthispass",
+                "label": "A propos de ce passe."
+            },
+            {
+                "value": "l'application Papillon. Elle permet de gérer sa vie scolaire, de suivre ses notes, de consulter les menus de la cantine... https://getpapillon.xyz",
+                "key": "generatedby",
+                "label": "Généré par"
+            },
+            {
+                "value": "https://getpapillon.xyz",
+                "key": "privacyurl",
+                "label": "Politique de confidentialité"
+            }
+        ]
+        
+    }
+}

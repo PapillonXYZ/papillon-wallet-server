@@ -1,0 +1,30 @@
+{
+  "name": "papillon-wallet-server",
+  "version": "1.0.0",
+  "description": "Serveur Apple Wallet pour les cartes de cantine Papillon",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PapillonApp/papillon-wallet-server.git"
+  },
+  "keywords": [
+    "apple",
+    "wallet",
+    "papillon"
+  ],
+  "author": "PapillonApp",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PapillonApp/papillon-wallet-server/issues"
+  },
+  "homepage": "https://github.com/PapillonApp/papillon-wallet-server#readme",
+  "dependencies": {
+    "dotenv": "^16.3.2",
+    "fastify": "^4.25.2",
+    "passkit-generator": "^3.1.11"
+  }
+}

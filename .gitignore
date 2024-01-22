@@ -1,0 +1,5 @@
+.env
+package-lock.json
+signerCert.pem
+signerKey.pem
+node_modules
