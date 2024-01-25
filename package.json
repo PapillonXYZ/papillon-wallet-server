@@ -25,6 +25,7 @@
   "dependencies": {
     "dotenv": "^16.3.2",
     "fastify": "^4.25.2",
+    "os": "^0.1.2",
     "passkit-generator": "^3.1.11"
   }
 }

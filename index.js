@@ -1,93 +1,79 @@
-const path = require("path");
-const fs = require("fs");
-const crypto = require("crypto");
-const { PKPass } = require("passkit-generator");
+const os = require("os");
 const fastify = require("fastify")({
-  logger: true,
+    logger: true,
 });
 require('dotenv').config()
 
-const certDirectory = path.resolve(process.cwd(), "cert");
-const wwdr = fs.readFileSync(path.join(certDirectory, "wwdr.pem"));
-const signerCert = fs.readFileSync(path.join(certDirectory, "signerCert.pem"));
-const signerKey = fs.readFileSync(path.join(certDirectory, "signerKey.pem"));
-const signerKeyPassphrase = process.env.SIGNER_KEY_PASSPHRASE;
+const createRestaurant = require("./module/restaurant.js");
 
 // Declare a route
 fastify.get("/", function (request, reply) {
-  reply.send({ status: "ok" });
+    reply.send(
+        { 
+            status: "ok" ,
+            package_name: process.env.npm_package_name,
+            package_version: process.env.npm_package_version,
+            port : process.env.PORT ?? 3000,
+            host:{
+                os : process.platform,
+                cpu_arch : process.arch,
+                hostname : os.hostname(),
+                node_version : process.version,
+            },
+            url_scheme: [{
+                name: "Add restautant pass",
+                url: "/restaurant",
+                method: "POST",
+                parameters: [
+                    {
+                        name: "name",
+                        type: "string",
+                        required: false,
+                        description: "Name of the user",
+                    },
+                    {
+                        name: "classe",
+                        type: "string",
+                        required: false,
+                        description: "Class of the user",
+                    },
+                    {
+                        name: "qrcodenumber",
+                        type: "string",
+                        required: true,
+                        description: "QR Code number of the user",
+                    },
+                    {
+                        name:"os",
+                        type:"string",
+                        required:true,
+                        description:"OS of the user",
+                    }
+                ],
+            }
+        ],
+        });
 });
 
-fastify.post("/", async (request, reply) => {
-  const { name } = request.body;
-  const { qrcodenumber } = request.body;
-  const { classe } = request.body;
+fastify.post("/restaurant", async (request, reply) => {
+    const { name } = request.body;
+    const { classe } = request.body;
+    const { qrcodenumber } = request.body;
+    const { os } = request.body;
 
-  // Feel free to use any other kind of UID here or even read an
-  // existing ticket from the database and use its ID
-  const passID = crypto
-    .createHash("md5")
-    .update(`${name}_${Date.now()}`)
-    .digest("hex");
+    const restaurant = await createRestaurant(name, classe, qrcodenumber, os);
 
-  // Create a new pass
-  const pass = await PKPass.from(
-    {
-      model: path.resolve(process.cwd(), "cantine.pass"),
-      certificates: {
-        wwdr,
-        signerCert,
-        signerKey,
-        signerKeyPassphrase
-      },
-    },
-    {
-      eventTicket: {},
-      serialNumber: passID,
-    }
-  );
+    console.log(restaurant);
 
-  // Adding some settings to be written inside pass.json
-  pass.setBarcodes({
-    message: qrcodenumber,
-    format: "PKBarcodeFormatQR",
-    altText: qrcodenumber
-  });
-  pass.set
-  if (Boolean(name)) {
-    pass.secondaryFields.push(
-      {
-        key: "name",
-        label: "Nom",
-        value: name,
-      }
-    );
-  }
-
-  if (Boolean(classe)) {
-    pass.secondaryFields.push(
-      {
-        key: "class",
-        label: "Classe",
-        value: classe,
-        textAlignment: "PKTextAlignmentRight",
-      }
-    );
-  }
-
-  console.log(pass);
-  console.log(passID);
-  console.log(name);
-
-  reply.header("Content-Type", "application/vnd-apple.pkpass");
-
-  reply.send(pass.getAsBuffer());
+    reply.header("Content-Type", "application/vnd-apple.pkpass");
+    reply.send(restaurant.getAsBuffer());
+    
 });
 
-// Start the server
+// Démaerrage du serveur
 fastify.listen({ port: process.env.PORT ?? 3000 }, function (err) {
-  if (err) {
-    fastify.log.error(err);
-    process.exit(1);
-  }
+    if (err) {
+        fastify.log.error(err);
+        process.exit(1);
+    }
 });
