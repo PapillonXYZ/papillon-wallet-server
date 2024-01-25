@@ -1,5 +1,5 @@
 # Papillon-wallet-server
-Serveur Apple Wallet pour les cartes de cantine Papillon
+Serveur Apple/Google(bientôt) Wallet pour générer des cartes pour Papillon
 
 ## Installation
 > [!WARNING]  
@@ -17,9 +17,10 @@ SIGNER_KEY_PASSPHRASE = <passphrase>
 
 ## Routes
 - ```/``` : GET -> Status du serveur
-- ```/``` : POST -> Créer la carte
+- ```/restaurant``` : POST -> Créer la carte
   - ```name``` : string
   - ```classe``` : string
   - ```qrcodenumber``` : int ou string (obligatoire)
+  - ```os``` : string (obligatoire)
 
 
